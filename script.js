@@ -86,8 +86,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 <h1>${document.getElementById('name').value}</h1>
                 <p>${document.getElementById('phone').value} | ${document.getElementById('email').value}</p>
                 <p>
-                    LinkedIn: <a href="${linkedin}" target="_blank">LinkedIn</a> | 
-                    GitHub: <a href="${github}" target="_blank">GitHub</a>
+                    <a href="${linkedin}" target="_blank">LinkedIn</a> | 
+                    <a href="${github}" target="_blank">GitHub</a>
                 </p>
             </div>
             <div class="section">
