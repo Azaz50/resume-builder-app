@@ -79,16 +79,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const resumePreview = document.getElementById('resume-preview');
         const linkedin = document.getElementById('linkedin').value;
         const github = document.getElementById('github').value;
+        const portfolio = document.getElementById('portfolio').value;
 
         // Generate the resume preview content
         let resumeContent = `
             <div class="header">
                 <img src="${photoPreview.src}" alt="Photo">
                 <h1>${document.getElementById('name').value}</h1>
-                <p>${document.getElementById('phone').value} | ${document.getElementById('email').value}</p>
-                <p>
-                    <a href="${linkedin}" target="_blank">LinkedIn</a> | 
-                    <a href="${github}" target="_blank">GitHub</a>
+                <p>${document.getElementById('phone').value} | 
+                ${document.getElementById('email').value} |
+                <a href="${linkedin}" target="_blank">LinkedIn</a> | 
+                <a href="${github}" target="_blank">GitHub</a> |
+                <a href="${portfolio}" target="_blank">Portfolio</a> 
+
                 </p>
             </div>
         `;
