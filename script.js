@@ -80,7 +80,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const linkedin = document.getElementById('linkedin').value;
         const github = document.getElementById('github').value;
 
-        resumePreview.innerHTML = `
+        // Generate the resume preview content
+        let resumeContent = `
             <div class="header">
                 <img src="${photoPreview.src}" alt="Photo">
                 <h1>${document.getElementById('name').value}</h1>
@@ -90,57 +91,139 @@ document.addEventListener('DOMContentLoaded', function () {
                     <a href="${github}" target="_blank">GitHub</a>
                 </p>
             </div>
-            <div class="section">
-                <h3>Summary</h3>
-                <p>${document.getElementById('summary').value}</p>
-            </div>
-            <div class="section">
-                <h3>Experience</h3>
-                <ul>
-                    ${Array.from(document.querySelectorAll('#experience-list div')).map(exp => `
-                        <li>
-                            <strong>${exp.children[0].value}</strong> - ${exp.children[1].value} (${exp.children[2].value})
-                            <ul>
-                                ${exp.children[3].value.split('\n').map(line => `<li>${line}</li>`).join('')}
-                            </ul>
-                        </li>
-                    `).join('')}
-                </ul>
-            </div>
-            <div class="section">
-                <h3>Education</h3>
-                <ul>
-                    ${Array.from(document.querySelectorAll('#education-list div')).map(edu => `
-                        <li>
-                            <strong>${edu.children[0].value}</strong> - ${edu.children[1].value} (${edu.children[2].value})
-                            <p>${edu.children[3].value}</p>
-                        </li>
-                    `).join('')}
-                </ul>
-            </div>
-            <div class="section">
-                <h3>Skills</h3>
-                <p>${Array.from(document.querySelectorAll('.skill-tag')).map(skill => skill.textContent).join(', ')}</p>
-            </div>
-            <div class="section">
-                <h3>Projects</h3>
-                <ul>
-                    ${Array.from(document.querySelectorAll('#projects-list div')).map(proj => `
-                        <li>
-                            <strong>${proj.children[0].value}</strong>
-                            <ul>
-                                ${proj.children[1].value.split('\n').map(line => `<li>${line}</li>`).join('')}
-                            </ul>
-                            <p>Technologies: ${proj.children[2].value}</p>
-                        </li>
-                    `).join('')}
-                </ul>
-            </div>
-            <div class="section">
-                <h3>Interests</h3>
-                <p>${document.getElementById('interests').value}</p>
-            </div>
         `;
+
+        // Summary Section
+        const summary = document.getElementById('summary').value.trim();
+        if (summary) {
+            resumeContent += `
+                <div class="section">
+                    <h3>Summary</h3>
+                    <p>${summary}</p>
+                </div>
+            `;
+        }
+
+        // Experience Section
+        const experienceEntries = Array.from(document.querySelectorAll('#experience-list div'));
+        if (experienceEntries.length > 0) {
+            let experienceContent = '';
+            experienceEntries.forEach(exp => {
+                const jobTitle = exp.children[0].value.trim();
+                const companyName = exp.children[1].value.trim();
+                const dates = exp.children[2].value.trim();
+                const description = exp.children[3].value.trim();
+
+                if (jobTitle || companyName || dates || description) {
+                    experienceContent += `
+                        <li>
+                            <strong>${jobTitle}</strong> - ${companyName} (${dates})
+                            <ul>
+                                ${description.split('\n').map(line => line.trim()).filter(line => line).map(line => `<li>${line}</li>`).join('')}
+                            </ul>
+                        </li>
+                    `;
+                }
+            });
+
+            if (experienceContent) {
+                resumeContent += `
+                    <div class="section">
+                        <h3>Experience</h3>
+                        <ul>${experienceContent}</ul>
+                    </div>
+                `;
+            }
+        }
+
+        // Education Section
+        const educationEntries = Array.from(document.querySelectorAll('#education-list div'));
+        if (educationEntries.length > 0) {
+            let educationContent = '';
+            educationEntries.forEach(edu => {
+                const degree = edu.children[0].value.trim();
+                const institution = edu.children[1].value.trim();
+                const dates = edu.children[2].value.trim();
+                const description = edu.children[3].value.trim();
+
+                if (degree || institution || dates || description) {
+                    educationContent += `
+                        <li>
+                            <strong>${degree}</strong> - ${institution} (${dates})
+                            <p>${description}</p>
+                        </li>
+                    `;
+                }
+            });
+
+            if (educationContent) {
+                resumeContent += `
+                    <div class="section">
+                        <h3>Education</h3>
+                        <ul>${educationContent}</ul>
+                    </div>
+                `;
+            }
+        }
+
+        // Skills Section
+        const skills = Array.from(document.querySelectorAll('.skill-tag')).map(skill => skill.textContent.trim()).filter(skill => skill);
+        if (skills.length > 0) {
+            resumeContent += `
+                <div class="section">
+                    <h3>Skills</h3>
+                    <p>${skills.join(', ')}</p>
+                </div>
+            `;
+        }
+
+        // Projects Section
+        const projectEntries = Array.from(document.querySelectorAll('#projects-list div'));
+        if (projectEntries.length > 0) {
+            let projectContent = '';
+            projectEntries.forEach(proj => {
+                const projectTitle = proj.children[0].value.trim();
+                const description = proj.children[1].value.trim();
+                const technologies = proj.children[2].value.trim();
+
+                if (projectTitle || description || technologies) {
+                    projectContent += `
+                        <li>
+                            <strong>${projectTitle}</strong>
+                            <ul>
+                                ${description.split('\n').map(line => line.trim()).filter(line => line).map(line => `<li>${line}</li>`).join('')}
+                            </ul>
+                            <p>Technologies: ${technologies}</p>
+                        </li>
+                    `;
+                }
+            });
+
+            if (projectContent) {
+                resumeContent += `
+                    <div class="section">
+                        <h3>Projects</h3>
+                        <ul>${projectContent}</ul>
+                    </div>
+                `;
+            }
+        }
+
+        // Interests Section
+        const interests = document.getElementById('interests').value.trim();
+        if (interests) {
+            resumeContent += `
+                <div class="section">
+                    <h3>Interests</h3>
+                    <p>${interests}</p>
+                </div>
+            `;
+        }
+
+        // Set the resume preview content
+        resumePreview.innerHTML = resumeContent;
+
+        // Show the preview modal
         previewModal.style.display = 'block';
     });
 
@@ -153,7 +236,14 @@ document.addEventListener('DOMContentLoaded', function () {
     downloadResumeBtn.addEventListener('click', function () {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        doc.text(document.getElementById('resume-preview').innerText, 10, 10);
+
+        // Get the resume preview content
+        const resumeContent = document.getElementById('resume-preview').innerText;
+
+        // Add the content to the PDF
+        doc.text(resumeContent, 10, 10);
+
+        // Save the PDF
         doc.save('resume.pdf');
     });
 });
